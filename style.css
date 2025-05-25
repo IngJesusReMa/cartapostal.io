@@ -266,8 +266,8 @@ body {
 /* Teléfonos pequeños (ej. iPhone SE) */
 @media (max-width: 520px) {
     .envelope-container {
-        width: 90vw; /* Ocupa más del ancho del viewport */
-        height: calc(90vw * 0.68); /* Mantiene la proporción (260/380 ≈ 0.68) */
+        width: 100vw; /* Ocupa más del ancho del viewport */
+        height: calc(100vw * 0.68); /* Mantiene la proporción (260/380 ≈ 0.68) */
     }
     .envelope.open {
         transform: translateY(min(-60px, -10vh)) rotateX(15deg);
@@ -278,10 +278,10 @@ body {
 }
 
 /* Teléfonos medianos (ej. iPhone 8, Galaxy S) */
-@media (min-width: 621px) and (max-width: 576px) {
+@media (min-width: 621px) and (max-width: 676px) {
     .envelope-container {
-        width: 85vw;
-        height: calc(85vw * 0.68);
+        width: 95vw;
+        height: calc(95vw * 0.68);
     }
     .envelope.open {
         transform: translateY(min(-70px, -12vh)) rotateX(15deg);
@@ -292,10 +292,10 @@ body {
 }
 
 /* Tablets en modo retrato o teléfonos grandes */
-@media (min-width: 577px) and (max-width: 768px) {
+@media (min-width: 677px) and (max-width: 868px) {
     .envelope-container {
-        width: 70vw;
-        height: calc(70vw * 0.68);
+        width: 75vw;
+        height: calc(75vw * 0.68);
     }
 }
 
