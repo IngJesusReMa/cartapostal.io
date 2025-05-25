@@ -278,7 +278,7 @@ body {
 }
 
 /* Teléfonos medianos (ej. iPhone 8, Galaxy S) */
-@media (min-width: 421px) and (max-width: 576px) {
+@media (min-width: 621px) and (max-width: 576px) {
     .envelope-container {
         width: 85vw;
         height: calc(85vw * 0.68);
