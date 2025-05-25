@@ -264,7 +264,7 @@ body {
 /* ---------------------------------------------------------------------- */
 
 /* Teléfonos pequeños (ej. iPhone SE) */
-@media (max-width: 320px) {
+@media (max-width: 420px) {
     .envelope-container {
         width: 90vw; /* Ocupa más del ancho del viewport */
         height: calc(90vw * 0.68); /* Mantiene la proporción (260/380 ≈ 0.68) */
