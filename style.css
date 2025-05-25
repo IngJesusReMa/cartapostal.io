@@ -1,0 +1,317 @@
+:root {
+    /* ... (tus variables de color y sombra existentes) ... */
+    --envelope-main-color: #dcb38f;
+    --flap-inside-color: #c9a37e;
+    --seal-color: #8b0000;
+    --letter-color: #ffffff;
+    --text-color: #5a3c2a;
+    --shadow-color: rgba(0, 0, 0, 0.25);
+
+    /* Nuevas variables para controlar el tamaño base del sobre */
+    --base-envelope-width: 580px; /* Ancho base para pantallas grandes */
+    --base-envelope-height: 360px; /* Alto base para pantallas grandes */
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(to bottom right, #f4e8d2, #d1c0a0);
+    font-family: 'Cormorant Garamond', 'Old Standard TT', serif;
+    overflow: hidden;
+}
+
+.envelope-container {
+    position: relative;
+    /* Usamos unidades relativas o variables con fallback */
+    width: clamp(380px, 80vw, var(--base-envelope-width)); /* Mínimo 280px, máximo 80vw, hasta base-width */
+    height: clamp(190px, 55vw, var(--base-envelope-height)); /* Mínimo 190px, máximo 55vw, hasta base-height */
+    perspective: 1000px;
+    border-radius: 8px;
+    /* Para asegurar que el contenedor crezca proporcionalmente en pantallas más grandes */
+    max-width: var(--base-envelope-width);
+    max-height: var(--base-envelope-height);
+}
+
+.envelope {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 1s ease-in-out;
+    box-shadow: 0 10px 30px var(--shadow-color);
+    border-radius: 8px;
+}
+
+.envelope.open {
+    /* Ajustamos la elevación en base a la altura del viewport para responsividad */
+    transform: translateY(min(-90px, -15vh)) rotateX(15deg);
+    box-shadow: 0 20px 50px var(--shadow-color);
+}
+
+.envelope-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('parchment_texture.jpg');
+    background-size: cover;
+    background-position: center;
+    background-color: var(--envelope-main-color);
+    border-radius: 8px;
+    z-index: 0;
+}
+
+/* Estilos comunes para todas las solapas */
+.flap {
+    position: absolute;
+    background-image: url('parchment_texture.jpg');
+    background-size: cover;
+    background-position: center;
+    background-color: var(--envelope-main-color);
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: transform 0.6s ease-in-out;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.top-flap {
+    width: 100%;
+    height: 50%;
+    top: 0;
+    left: 0;
+    transform-origin: bottom center;
+    z-index: 4;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 8px 8px 0 0;
+}
+
+.envelope.open .top-flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+    background-color: var(--flap-inside-color);
+    background-image: none;
+}
+
+.bottom-flap {
+    width: 100%;
+    height: 50%;
+    bottom: 0;
+    left: 0;
+    transform-origin: top center;
+    z-index: 2;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 0 0 8px 8px;
+}
+
+.envelope.open .bottom-flap {
+    transform: rotateX(-90deg);
+    z-index: 0;
+    background-color: var(--flap-inside-color);
+    background-image: none;
+}
+
+.left-flap, .right-flap {
+    width: 50%;
+    height: 100%;
+    top: 0;
+    z-index: 3;
+    background-color: var(--envelope-main-color);
+}
+
+.left-flap {
+    left: 0;
+    transform-origin: right center;
+    border-radius: 8px 0 0 8px;
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.envelope.open .left-flap {
+    transform: rotateY(-90deg);
+    background-color: var(--flap-inside-color);
+    background-image: none;
+}
+
+.right-flap {
+    right: 0;
+    transform-origin: left center;
+    border-radius: 0 8px 8px 0;
+    border-left: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.envelope.open .right-flap {
+    transform: rotateY(90deg);
+    background-color: var(--flap-inside-color);
+    background-image: none;
+}
+
+/* Sello */
+.seal {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(50px, 15vw, 65px); /* Se ajusta con la pantalla, con límites */
+    height: clamp(50px, 15vw, 65px);
+    background-color: var(--seal-color);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 0 8px rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: clamp(1em, 4vw, 1.5em); /* El tamaño de la fuente se ajusta también */
+}
+
+.seal:hover {
+    transform: translate(-50%, -50%) scale(1.08);
+    background-color: #a00000;
+}
+
+.envelope.open .seal {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.5);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Carta */
+.letter {
+    position: absolute;
+    top: 15%;
+    left: 10%;
+    width: 80%;
+    height: 70%;
+    background-image: url('parchment_texture.jpg');
+    background-size: cover;
+    background-position: center;
+    background-color: var(--letter-color);
+    padding: clamp(15px, 4vw, 25px); /* Padding responsivo */
+    box-sizing: border-box;
+    border-radius: 6px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    /* Ajusta el inicio del translateY con una unidad relativa */
+    transform: translateY(min(220px, 40vh));
+    opacity: 0;
+    transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+                opacity 0.6s ease-in-out;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    pointer-events: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+}
+
+.envelope.open .letter {
+    transform: translateY(0);
+    opacity: 1;
+    transition-delay: 0.8s;
+    pointer-events: auto;
+}
+
+.letter-content h2 {
+    color: var(--text-color);
+    margin-top: 0;
+    font-size: clamp(1.4em, 5vw, 1.8em); /* Tamaño de fuente responsivo para h2 */
+    font-weight: 600;
+    font-family: 'Cinzel Decorative', serif;
+    font-style: normal;
+}
+
+.letter-content p {
+    color: var(--text-color);
+    line-height: 1.6;
+    font-size: clamp(0.9em, 3vw, 1em); /* Tamaño de fuente responsivo para párrafos */
+    margin-bottom: clamp(5px, 2vw, 10px); /* Margen responsivo */
+}
+
+.letter-content a {
+    color: #4a2f1c;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.letter-content a:hover {
+    color: #8b0000;
+    text-decoration: underline;
+}
+
+.letter-content p:last-of-type {
+    margin-top: clamp(15px, 5vw, 20px); /* Margen responsivo */
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: clamp(1em, 4vw, 1.2em); /* Tamaño de fuente responsivo para gótico */
+    line-height: 1;
+    letter-spacing: 1px;
+    color: #333;
+    font-style: normal;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Media Queries para ajustes finos en diferentes tamaños de pantalla */
+/* ---------------------------------------------------------------------- */
+
+/* Teléfonos pequeños (ej. iPhone SE) */
+@media (max-width: 320px) {
+    .envelope-container {
+        width: 90vw; /* Ocupa más del ancho del viewport */
+        height: calc(90vw * 0.68); /* Mantiene la proporción (260/380 ≈ 0.68) */
+    }
+    .envelope.open {
+        transform: translateY(min(-60px, -10vh)) rotateX(15deg);
+    }
+    .letter {
+        transform: translateY(min(150px, 30vh));
+    }
+}
+
+/* Teléfonos medianos (ej. iPhone 8, Galaxy S) */
+@media (min-width: 321px) and (max-width: 576px) {
+    .envelope-container {
+        width: 85vw;
+        height: calc(85vw * 0.68);
+    }
+    .envelope.open {
+        transform: translateY(min(-70px, -12vh)) rotateX(15deg);
+    }
+    .letter {
+        transform: translateY(min(180px, 35vh));
+    }
+}
+
+/* Tablets en modo retrato o teléfonos grandes */
+@media (min-width: 577px) and (max-width: 768px) {
+    .envelope-container {
+        width: 70vw;
+        height: calc(70vw * 0.68);
+    }
+}
+
+/* Tablets en modo paisaje o laptops pequeñas */
+@media (min-width: 769px) and (max-width: 992px) {
+    .envelope-container {
+        width: 60vw;
+        height: calc(60vw * 0.68);
+    }
+}
+
+/* Monitores de escritorio grandes */
+@media (min-width: 993px) {
+    .envelope-container {
+        /* Vuelve a los tamaños base o se ajusta a un porcentaje */
+        width: var(--base-envelope-width);
+        height: var(--base-envelope-height);
+    }
+}
